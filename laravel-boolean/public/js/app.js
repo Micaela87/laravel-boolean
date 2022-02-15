@@ -1954,7 +1954,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      allPostCards: []
+      allPostCards: [],
+      sender: '',
+      address: '',
+      text: '',
+      image: ''
     };
   },
   mounted: function mounted() {
@@ -2009,7 +2013,68 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }
 
       return getAllPostCards;
-    }()
+    }(),
+    sendData: function () {
+      var _sendData = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+        var data, response, responseToJson;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.prev = 0;
+                data = new FormData();
+                data.append('sender', this.sender);
+                data.append('address', this.address);
+                data.append('text', this.text);
+                data.append('image', this.image);
+                _context2.next = 8;
+                return fetch('http://localhost:8000/api/postcards/store', {
+                  method: 'POST',
+                  body: data
+                });
+
+              case 8:
+                response = _context2.sent;
+
+                if (!response.ok) {
+                  _context2.next = 14;
+                  break;
+                }
+
+                _context2.next = 12;
+                return response.json();
+
+              case 12:
+                responseToJson = _context2.sent;
+                this.allPostCards.push(responseToJson.data);
+
+              case 14:
+                _context2.next = 19;
+                break;
+
+              case 16:
+                _context2.prev = 16;
+                _context2.t0 = _context2["catch"](0);
+                console.log(_context2.t0);
+
+              case 19:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this, [[0, 16]]);
+      }));
+
+      function sendData() {
+        return _sendData.apply(this, arguments);
+      }
+
+      return sendData;
+    }(),
+    uploadFile: function uploadFile() {
+      this.image = this.$refs.file.files[0];
+      console.log(this.image);
+    }
   }
 });
 
@@ -38372,7 +38437,101 @@ var render = function () {
     [
       _c("h1", { staticClass: "my-4" }, [_vm._v("PostCards")]),
       _vm._v(" "),
-      _vm._m(0),
+      _c("form", { staticClass: "my-4" }, [
+        _c("label", { attrs: { for: "sender" } }, [_vm._v("Sender")]),
+        _vm._v(" "),
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.sender,
+              expression: "sender",
+            },
+          ],
+          attrs: { type: "text", name: "sender" },
+          domProps: { value: _vm.sender },
+          on: {
+            input: function ($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.sender = $event.target.value
+            },
+          },
+        }),
+        _c("br"),
+        _vm._v(" "),
+        _c("label", { attrs: { for: "address" } }, [_vm._v("Address")]),
+        _vm._v(" "),
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.address,
+              expression: "address",
+            },
+          ],
+          attrs: { type: "text", name: "address" },
+          domProps: { value: _vm.address },
+          on: {
+            input: function ($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.address = $event.target.value
+            },
+          },
+        }),
+        _c("br"),
+        _vm._v(" "),
+        _c("label", { attrs: { for: "text" } }, [_vm._v("Text")]),
+        _vm._v(" "),
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.text,
+              expression: "text",
+            },
+          ],
+          attrs: { type: "text", name: "text" },
+          domProps: { value: _vm.text },
+          on: {
+            input: function ($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.text = $event.target.value
+            },
+          },
+        }),
+        _c("br"),
+        _vm._v(" "),
+        _c("label", { attrs: { for: "image" } }, [_vm._v("Image")]),
+        _vm._v(" "),
+        _c("input", {
+          ref: "file",
+          attrs: { type: "file", name: "image" },
+          on: {
+            change: function ($event) {
+              return _vm.uploadFile()
+            },
+          },
+        }),
+        _c("br"),
+        _vm._v(" "),
+        _c("input", {
+          attrs: { type: "button", value: "Send" },
+          on: {
+            click: function ($event) {
+              return _vm.sendData()
+            },
+          },
+        }),
+      ]),
       _vm._v(" "),
       _vm._l(_vm.allPostCards, function (postCard, i) {
         return _c("div", { staticClass: "my-4" }, [
@@ -38382,43 +38541,21 @@ var render = function () {
           _vm._v(" "),
           _c("div", [_vm._v("Text: " + _vm._s(postCard.text))]),
           _vm._v(" "),
-          _c("div", [_vm._v("Img: " + _vm._s(postCard.image))]),
+          postCard.image
+            ? _c("div", [
+                _vm._v("Img: "),
+                _c("img", {
+                  attrs: { src: "/storage/img/" + postCard.image, alt: "" },
+                }),
+              ])
+            : _vm._e(),
         ])
       }),
     ],
     2
   )
 }
-var staticRenderFns = [
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("form", { staticClass: "my-4" }, [
-      _c("label", { attrs: { for: "sender" } }, [_vm._v("Sender")]),
-      _vm._v(" "),
-      _c("input", { attrs: { type: "text", name: "sender" } }),
-      _c("br"),
-      _vm._v(" "),
-      _c("label", { attrs: { for: "address" } }, [_vm._v("Address")]),
-      _vm._v(" "),
-      _c("input", { attrs: { type: "text", name: "address" } }),
-      _c("br"),
-      _vm._v(" "),
-      _c("label", { attrs: { for: "text" } }, [_vm._v("Text")]),
-      _vm._v(" "),
-      _c("input", { attrs: { type: "text", name: "text" } }),
-      _c("br"),
-      _vm._v(" "),
-      _c("label", { attrs: { for: "image" } }, [_vm._v("Image")]),
-      _vm._v(" "),
-      _c("input", { attrs: { type: "file", name: "image" } }),
-      _c("br"),
-      _vm._v(" "),
-      _c("input", { attrs: { type: "button", value: "Send" } }),
-    ])
-  },
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -50842,8 +50979,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Users\Micaela Milano\desktop\boolean\laravel-boolean\laravel-boolean\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\Users\Micaela Milano\desktop\boolean\laravel-boolean\laravel-boolean\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Users\Micaela Milano\Desktop\Boolean\laravel-boolean\laravel-boolean\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Users\Micaela Milano\Desktop\Boolean\laravel-boolean\laravel-boolean\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

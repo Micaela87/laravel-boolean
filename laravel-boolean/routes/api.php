@@ -19,3 +19,5 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Route::get('/postcards', 'PostCardsController@getAllPostCards');
+
+Route::post('/postcards/store', 'PostCardsController@storePostCard');
